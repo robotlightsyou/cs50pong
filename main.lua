@@ -1,13 +1,9 @@
-VIRTUAL_WIDTH = 384
-VIRTUAL_HEIGHT = 216
 DISPLAY_WIDTH, DISPLAY_HEIGHT = love.window.getDesktopDimensions()
 WINDOW_WIDTH = DISPLAY_WIDTH * 0.75
 WINDOW_HEIGHT = DISPLAY_HEIGHT * 0.75
-love.window.setTitle("Pong Seminar Lua Demo")
+love.window.setTitle("cs50 Pong Seminar Demo")
 love.window.updateMode(WINDOW_WIDTH, WINDOW_HEIGHT)
 
--- WINDOW_WIDTH = 1280
--- WINDOW_HEIGHT = 720
 
 push = require 'push'
 
