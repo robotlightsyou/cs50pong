@@ -6,8 +6,8 @@ VIRTUAL_HEIGHT = 216
 -- love.window.setTitle("Pong Seminar Lua Demo")
 -- love.window.updateMode(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-WINDOW_WIDTH = 1000
-WINDOW_HEIGHT = 810
+WINDOW_WIDTH = 1280
+WINDOW_HEIGHT = 720
 
 push = require 'push'
 
@@ -22,19 +22,19 @@ SMALL_FONT = love.graphics.newFont(16)
 BALL_SIZE = 4
 
 player1 = {
-    x = offset, y = offset, score = 0,
+    x = offset, y = offset, score = 0
 }
 
 player2 = {
     x = VIRTUAL_WIDTH - PADDLE_WIDTH - offset,
     y = VIRTUAL_HEIGHT - PADDLE_HEIGHT - offset,
-    score = 0,
+    score = 0
 }
 
 ball = {
     x = VIRTUAL_WIDTH / 2 - BALL_SIZE / 2,
     y = VIRTUAL_WIDTH / 2 - BALL_SIZE / 2,
-    dx = 0, dy = 0,
+    dx = 0, dy = 0
 }
 
 gameState = 'title'
@@ -49,17 +49,12 @@ function love.load()
 end
 
 
-function love.upate(dt)
+function love.update(dt)
     if love.keyboard.isDown('e') then
         player1.y = player1.y - PADDLE_SPEED * dt
     elseif love.keyboard.isDown('d') then
         player1.y = player1.y + PADDLE_SPEED * dt
     end
-    -- if love.keyboard.isDown('w') then
-    --     player1.y = player1.y - PADDLE_SPEED * dt
-    -- elseif love.keyboard.isDown('s') then
-    --     player1.y = player1.y + PADDLE_SPEED * dt
-    -- end
 
     if love.keyboard.isDown('k') then
         player2.y = player2.y - PADDLE_SPEED * dt
@@ -91,8 +86,8 @@ function love.upate(dt)
             ball.dx = -ball.dx * 1.02
             ball.x = player1.x + PADDLE_WIDTH
         elseif collides(player2, ball) then
-            ball.dx = -ball.x * 1.02
-            ball.x = player2.x + PADDLE_WIDTH
+            ball.dx = -ball.dx * 1.02
+            ball.x = player2.x - BALL_SIZE
         end
     end
 end
