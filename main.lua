@@ -1,13 +1,13 @@
 VIRTUAL_WIDTH = 384
 VIRTUAL_HEIGHT = 216
--- DISPLAY_WIDTH, DISPLAY_HEIGHT = love.window.getDesktopDimensions()
--- WINDOW_WIDTH = DISPLAY_WIDTH * 0.75
--- WINDOW_HEIGHT = DISPLAY_HEIGHT * 0.75
--- love.window.setTitle("Pong Seminar Lua Demo")
--- love.window.updateMode(WINDOW_WIDTH, WINDOW_HEIGHT)
+DISPLAY_WIDTH, DISPLAY_HEIGHT = love.window.getDesktopDimensions()
+WINDOW_WIDTH = DISPLAY_WIDTH * 0.75
+WINDOW_HEIGHT = DISPLAY_HEIGHT * 0.75
+love.window.setTitle("Pong Seminar Lua Demo")
+love.window.updateMode(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
+-- WINDOW_WIDTH = 1280
+-- WINDOW_HEIGHT = 720
 
 push = require 'push'
 
@@ -42,25 +42,45 @@ gameState = 'title'
 function love.load()
     math.randomseed(os.time())
     -- setDefaultFilter used to sharpen resolution, I didn't like it with just text.
-    love.graphics.setDefaultFilter('nearest', 'nearest')
+    -- love.graphics.setDefaultFilter('nearest', 'nearest')
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT)
 
     resetBall()
 end
 
+if ball.y <= 0 then
+    ball.dy = -ball.dy
+elseif ball.y >= VIRTUAL_HEIGHT - BALL_SIZE then
+    ball.dy = -ball.dy
+end
+
 
 function love.update(dt)
-    if love.keyboard.isDown('e') then
-        player1.y = player1.y - PADDLE_SPEED * dt
-    elseif love.keyboard.isDown('d') then
-        player1.y = player1.y + PADDLE_SPEED * dt
+    if (player1.y >= 0) and (player1.y <= VIRTUAL_HEIGHT - PADDLE_HEIGHT) then
+        if love.keyboard.isDown('e') then
+            player1.y = player1.y - PADDLE_SPEED * dt
+        elseif love.keyboard.isDown('d') then
+            player1.y = player1.y + PADDLE_SPEED * dt
+        end
+    else
+        if player1.y <= 0 then player1.y = 1 
+        elseif player1.y >= VIRTUAL_HEIGHT - PADDLE_HEIGHT then 
+            player1.y = VIRTUAL_HEIGHT - PADDLE_HEIGHT - 1
+        end  
     end
-
-    if love.keyboard.isDown('k') then
-        player2.y = player2.y - PADDLE_SPEED * dt
-    elseif love.keyboard.isDown('j') then
-        player2.y = player2.y + PADDLE_SPEED * dt
+    if (player2.y >= 0) and (player2.y <= VIRTUAL_HEIGHT - PADDLE_HEIGHT) then
+        if love.keyboard.isDown('k') then
+            player2.y = player2.y - PADDLE_SPEED * dt
+        elseif love.keyboard.isDown('j') then
+            player2.y = player2.y + PADDLE_SPEED * dt
+        end
+    else
+        if player2.y <= 0 then player2.y = 1 
+        elseif player2.y >= VIRTUAL_HEIGHT - PADDLE_HEIGHT then 
+            player2.y = VIRTUAL_HEIGHT - PADDLE_HEIGHT - 1
+        end  
     end
+    
 
     if gameState == 'play' then
         ball.x = ball.x + ball.dx * dt
