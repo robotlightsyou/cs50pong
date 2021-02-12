@@ -84,7 +84,7 @@ function love.upate(dt)
         if ball.y <= 0 then
             ball.dy = -ball.dy
         elseif ball.y >= VIRTUAL_HEIGHT - BALL_SIZE then
-            ball.dy = 0ball.dy
+            ball.dy = -ball.dy
         end
 
         if collides(player1, ball) then
@@ -105,9 +105,9 @@ function love.keypressed(key)
 
     if key == 'enter' or key == 'return' then
         if gameState == 'title' then
-            gameState == 'serve'
+            gameState = 'serve'
         elseif gameState == 'serve' then
-            gameState == 'play'
+            gameState = 'play'
         end
     end
 end
@@ -117,8 +117,46 @@ function love.draw()
     push:start()
     -- clear() takes rgba values from 0 - 1.
     love.graphics.clear(40/255, 45/255, 52/255, 255/255)
+
+    if gameState == 'title' then
+        love.graphics.setFont(LARGE_FONT)
+        love.graphics.printf("Sem Pong", 0, 10, VIRTUAL_WIDTH, 'center')
+        love.graphics.setFont(SMALL_FONT)
+        love.graphics.printf('Press Enter', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
+    end
+
+    if gameState == 'serve' then
+        love.graphics.setFont(SMALL_FONT)
+        love.graphics.printf("Press Enter to serve!", 0, 10, VIRTUAL_WIDTH, 'center')
+    end
+
+    
     -- paddles
     love.graphics.rectangle('fill', player1.x, player1.y, PADDLE_WIDTH, PADDLE_HEIGHT)
     love.graphics.rectangle('fill', player2.x, player2.y, PADDLE_WIDTH, PADDLE_HEIGHT)
+    love.graphics.rectangle('fill', ball.x, ball.y, BALL_SIZE, BALL_SIZE)
+
+    love.graphics.setFont(LARGE_FONT)
+    love.graphics.print(player1.score, VIRTUAL_WIDTH / 2 - 36, VIRTUAL_HEIGHT / 2 - 16)
+    love.graphics.print(player2.score, VIRTUAL_WIDTH / 2  + 16, VIRTUAL_HEIGHT / 2 - 16)
+    love.graphics.setFont(SMALL_FONT)
     push:finish()
+end
+
+function collides(p,b)
+    return not (p.x > b.x + BALL_SIZE or p.y > b.y + BALL_SIZE or b.x > p.x + PADDLE_WIDTH or b.y > p.y + PADDLE_HEIGHT)
+end
+
+function resetBall()
+    ball.x = VIRTUAL_WIDTH / 2 - BALL_SIZE / 2
+    ball.y = VIRTUAL_HEIGHT / 2 - BALL_SIZE / 2
+
+    ball.dx = 60 + math.random(60)
+    if math.random(2) == 1 then
+        ball.dx = -ball.dx
+    end
+    ball.dy = 30 + math.random(60)
+    if math.random(2) == 1 then
+        ball.dy = -ball.dy
+    end
 end
